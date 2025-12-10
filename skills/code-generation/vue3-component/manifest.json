@@ -1,0 +1,17 @@
+{
+  "type": "skill",
+  "name": "Vue3 Component Generator",
+  "description": "Vue 3 组件代码生成技能，包含 Composition API 最佳实践和代码模板",
+  "description_en": "Vue 3 component code generation with Composition API best practices",
+  "version": "1.0.0",
+  "author": "Your Name",
+  "category": "code-generation",
+  "tags": ["vue3", "component", "typescript", "composition-api"],
+  "templates": [
+    "component.vue.template",
+    "composable.ts.template"
+  ],
+  "compatibility": {
+    "claude-code": ">=1.0.0"
+  }
+}

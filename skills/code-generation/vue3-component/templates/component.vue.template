@@ -1,0 +1,183 @@
+<script setup lang="ts">
+/**
+ * @component {{COMPONENT_NAME}}
+ * @description {{DESCRIPTION}}
+ */
+
+import { ref, computed, onMounted } from 'vue'
+
+// ==================== 类型定义 ====================
+
+interface Props {
+  /**
+   * 组件标题
+   */
+  title?: string
+  /**
+   * 是否禁用
+   */
+  disabled?: boolean
+}
+
+interface Emits {
+  (e: 'update', value: string): void
+  (e: 'submit'): void
+}
+
+// ==================== Props & Emits ====================
+
+const props = withDefaults(defineProps<Props>(), {
+  title: '默认标题',
+  disabled: false
+})
+
+const emit = defineEmits<Emits>()
+
+// ==================== 响应式状态 ====================
+
+const inputValue = ref('')
+const isLoading = ref(false)
+
+// ==================== 计算属性 ====================
+
+const displayTitle = computed(() => {
+  return props.title.toUpperCase()
+})
+
+const isValid = computed(() => {
+  return inputValue.value.length > 0
+})
+
+// ==================== 方法 ====================
+
+const handleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  inputValue.value = target.value
+  emit('update', inputValue.value)
+}
+
+const handleSubmit = () => {
+  if (!isValid.value || props.disabled) {
+    return
+  }
+
+  isLoading.value = true
+  
+  // 模拟异步操作
+  setTimeout(() => {
+    emit('submit')
+    isLoading.value = false
+  }, 1000)
+}
+
+const reset = () => {
+  inputValue.value = ''
+}
+
+// ==================== 生命周期 ====================
+
+onMounted(() => {
+  console.log('Component mounted:', props.title)
+})
+
+// ==================== 暴露给父组件 ====================
+
+defineExpose({
+  reset
+})
+</script>
+
+<template>
+  <div class="{{COMPONENT_CLASS}}">
+    <h2 class="{{COMPONENT_CLASS}}__title">{{ displayTitle }}</h2>
+    
+    <div class="{{COMPONENT_CLASS}}__content">
+      <input
+        v-model="inputValue"
+        type="text"
+        class="{{COMPONENT_CLASS}}__input"
+        :disabled="disabled || isLoading"
+        placeholder="请输入内容"
+        @input="handleInput"
+      />
+      
+      <button
+        class="{{COMPONENT_CLASS}}__button"
+        :class="{
+          '{{COMPONENT_CLASS}}__button--disabled': !isValid || disabled,
+          '{{COMPONENT_CLASS}}__button--loading': isLoading
+        }"
+        :disabled="!isValid || disabled || isLoading"
+        @click="handleSubmit"
+      >
+        {{ isLoading ? '提交中...' : '提交' }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.{{COMPONENT_CLASS}} {
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.{{COMPONENT_CLASS}}__title {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.{{COMPONENT_CLASS}}__content {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.{{COMPONENT_CLASS}}__input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.{{COMPONENT_CLASS}}__input:focus {
+  outline: none;
+  border-color: #1890ff;
+}
+
+.{{COMPONENT_CLASS}}__input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.{{COMPONENT_CLASS}}__button {
+  padding: 10px 20px;
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.{{COMPONENT_CLASS}}__button:hover:not(:disabled) {
+  background-color: #40a9ff;
+}
+
+.{{COMPONENT_CLASS}}__button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.{{COMPONENT_CLASS}}__button--loading {
+  position: relative;
+}
+</style>

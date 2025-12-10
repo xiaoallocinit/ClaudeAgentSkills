@@ -1,0 +1,13 @@
+{
+  "type": "agent",
+  "name": "Vue3 Expert",
+  "description": "Vue 3 / UniApp 跨端开发专家，精通 Composition API、TypeScript 和多端适配",
+  "description_en": "Vue 3 / UniApp cross-platform development expert",
+  "version": "1.0.0",
+  "author": "Your Name",
+  "category": "specialized",
+  "tags": ["vue3", "uniapp", "typescript", "composition-api", "cross-platform"],
+  "compatibility": {
+    "claude-code": ">=1.0.0"
+  }
+}

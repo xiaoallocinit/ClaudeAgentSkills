@@ -1,0 +1,147 @@
+/**
+ * @composable {{COMPOSABLE_NAME}}
+ * @description {{DESCRIPTION}}
+ */
+
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import type { Ref, ComputedRef } from 'vue'
+
+// ==================== 类型定义 ====================
+
+export interface {{COMPOSABLE_NAME}}Options {
+  /**
+   * 初始值
+   */
+  initialValue?: string
+  /**
+   * 是否自动执行
+   */
+  immediate?: boolean
+  /**
+   * 超时时间（毫秒）
+   */
+  timeout?: number
+}
+
+export interface {{COMPOSABLE_NAME}}Return {
+  /**
+   * 数据状态
+   */
+  data: Ref<string>
+  /**
+   * 加载状态
+   */
+  isLoading: Ref<boolean>
+  /**
+   * 错误信息
+   */
+  error: Ref<Error | null>
+  /**
+   * 处理后的数据
+   */
+  processedData: ComputedRef<string>
+  /**
+   * 是否成功
+   */
+  isSuccess: ComputedRef<boolean>
+  /**
+   * 执行方法
+   */
+  execute: () => Promise<void>
+  /**
+   * 重置方法
+   */
+  reset: () => void
+}
+
+// ==================== 组合式函数 ====================
+
+export function {{COMPOSABLE_NAME}}(
+  options: {{COMPOSABLE_NAME}}Options = {}
+): {{COMPOSABLE_NAME}}Return {
+  const { 
+    initialValue = '', 
+    immediate = false,
+    timeout = 5000
+  } = options
+
+  // ==================== 响应式状态 ====================
+
+  const data = ref(initialValue)
+  const isLoading = ref(false)
+  const error = ref<Error | null>(null)
+
+  // ==================== 计算属性 ====================
+
+  const processedData = computed(() => {
+    return data.value.trim().toUpperCase()
+  })
+
+  const isSuccess = computed(() => {
+    return !isLoading.value && error.value === null && data.value !== ''
+  })
+
+  // ==================== 方法 ====================
+
+  /**
+   * 执行异步操作
+   */
+  const execute = async () => {
+    isLoading.value = true
+    error.value = null
+
+    try {
+      // 模拟异步操作
+      await new Promise((resolve, reject) => {
+        const timer = setTimeout(resolve, 1000)
+        
+        // 超时处理
+        setTimeout(() => {
+          clearTimeout(timer)
+          reject(new Error('Operation timeout'))
+        }, timeout)
+      })
+
+      data.value = 'Loaded data'
+    } catch (e) {
+      error.value = e as Error
+      console.error('{{COMPOSABLE_NAME}} error:', e)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  /**
+   * 重置状态
+   */
+  const reset = () => {
+    data.value = initialValue
+    isLoading.value = false
+    error.value = null
+  }
+
+  // ==================== 生命周期 ====================
+
+  onMounted(() => {
+    if (immediate) {
+      execute()
+    }
+  })
+
+  onUnmounted(() => {
+    // 清理操作
+    reset()
+  })
+
+  // ==================== 返回 ====================
+
+  return {
+    data,
+    isLoading,
+    error,
+    processedData,
+    isSuccess,
+    execute,
+    reset
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "claude-toolkit",
+  "version": "1.0.0",
+  "description": "A collection of Claude Code Agents and Skills templates",
+  "main": "bin/cli.js",
+  "bin": {
+    "claude-toolkit": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "node bin/cli.js --list",
+    "link": "npm link"
+  },
+  "files": [
+    "bin",
+    "src",
+    "agents",
+    "skills"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "agent",
+    "skill",
+    "template",
+    "ai",
+    "anthropic"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaoallocinit/ClaudeAgentSkills.git"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "fs-extra": "^11.2.0",
+    "ora": "^8.0.1",
+    "boxen": "^7.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module"
+}
